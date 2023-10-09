@@ -1,6 +1,6 @@
-import sys
 import re
-from subprocess import Popen, PIPE, STDOUT
+import sys
+from subprocess import PIPE, STDOUT, Popen
 
 # block level
 # hook -> replace with @logosformathook with ; at the end
@@ -57,7 +57,7 @@ for line in refinedList:
     if "@logosformat" in line:
         fix = line.replace("@logosformat", "%")
         if any(token in fix for token in specialFilterList):
-            print(fix.replace(";",""))
+            print(fix.replace(";", ""))
         else:
             print(fix)
     else:
