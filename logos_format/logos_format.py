@@ -167,14 +167,14 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
             orig_logos = get_logos_path(cf_arg)
             # transform original Logos file to normal temp file
             if orig_logos is not None:
-                log.info(f"Found a Logos file to format: {orig_logos}")
+                log.info(f"Found a Logos file to format: '{orig_logos}'")
                 norm_ext = logos_extensions_to_normal_extensions[orig_logos.ext]
                 tmp_norm = Path(
                     tempfile.NamedTemporaryFile(
                         mode="w", dir=d, prefix=orig_logos.stem + "-", suffix=norm_ext, delete=False
                     ).name
                 )
-                log.info(f"Writing de-Logos'ed version of '{orig_logos}' at {tmp_norm}")
+                log.info(f"Writing de-Logos'ed version of '{orig_logos}' at '{tmp_norm}'")
                 if in_place:
                     # create a temporary Logos file for re-Logos'ing to avoid partial failure
                     tmp_logos = Path(
@@ -188,7 +188,7 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                     )
                     tmp_norm_to_tmp_logos[tmp_norm] = tmp_logos
                     tmp_logos_to_orig_logos[tmp_logos] = orig_logos
-                log.info(f"Transforming '{orig_logos} to temporary normalized '{tmp_norm}'")
+                log.info(f"Transforming '{orig_logos}' to temporary normalized '{tmp_norm}'")
                 with open(orig_logos) as orig_logos_file, open(tmp_norm, "w") as tmp_norm_file:
                     logos_to_norm(orig_logos_file, tmp_norm_file)
                 if save_temps and not in_place:
@@ -196,7 +196,7 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                         tmp_norm.parent / tmp_norm.stem + "-unformatted" + tmp_norm.ext
                     )
                     log.info(
-                        f"Saving additional copy of clang-format protected version of {orig_logos} at {tmp_norm_unformatted}"
+                        f"Saving additional copy of clang-format protected version of '{orig_logos}' at '{tmp_norm_unformatted}'"
                     )
                     tmp_norm.copy(tmp_norm_unformatted)
                 new_cf_args.append(tmp_norm)
