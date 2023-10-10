@@ -1,0 +1,11 @@
+- id: logos-format
+  name: logos-format
+  description: clang-format with Theos/Logos compatibility and pre-commit plugin
+  entry: logos-format -i
+  language: python
+  types: [file]
+  files: \.(x|xm)$
+  args: [-style=file]
+  require_serial: false
+  additional_dependencies: []
+  minimum_pre_commit_version: 2.9.2

@@ -1,0 +1,10 @@
+# Python
+**/__pycache__/
+/logos_format.egg-info/
+/logos_format/_version.py
+
+# Testing
+**/logos-format-tmp-*
+
+# VS Code
+**/.vscode

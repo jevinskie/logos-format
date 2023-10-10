@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logos-format"
+dynamic = ["version"]
+authors = [
+    {name = "Hearse", email = "hearsd@gmail.com"},
+    {name = "Jevin Sweval", email = "jevinsweval@gmail.com"},
+]
+description = "clang-format with Theos/Logos compatibility and pre-commit plugin"
+readme = {file = 'README.md', content-type='text/markdown'}
+requires-python = ">=3.8"
+keywords = ["clang-format", "pre-commit", "theos", "logos", "ios-tweak"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "mirrors-clang-format@git+https://github.com/jevinskie/mirrors-clang-format@v17.0.2",
+    "path",
+    "rich",
+    "pre-commit"
+]
+
+[project.urls]
+repository = "https://github.com/jevinskie/logos-format"
+
+[project.scripts]
+logos-format = "logos_format.logos_format:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "logos_format._version.__version__"}
+
+[tool.setuptools_scm]
+version_file = "logos_format/_version.py"
+
+[tool.setuptools]
+zip-safe = true
