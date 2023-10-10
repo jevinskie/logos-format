@@ -127,7 +127,6 @@ class SaveableTempDir(TempDir):
         return super().__new__(cls, *args, **cls.__super_kwargs__(**kwargs))
 
     def __init__(self, *args, save=False, **kwargs) -> None:
-        my_kwargs = "save"
         super().__init__(*args, **self.__super_kwargs__(**kwargs))
         self._save = save
 
