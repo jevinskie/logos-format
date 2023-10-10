@@ -291,6 +291,9 @@ class LogosHelpFormatter(argparse.HelpFormatter):
                 logos_help_lines.insert(i + 2, logos_verbose_line)
         logos_help_str = "\n".join(logos_help_lines)
         logos_help_str = re.sub(logos_format_pat, self._prog, logos_help_str)
+        logos_help_str = logos_help_str.replace(
+            "Objective-C: .m .mm", "Objective-C: .m .mm .x .xi .xm .xmi"
+        )
         return logos_help_str + "\n"
 
 

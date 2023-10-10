@@ -4,7 +4,7 @@
   entry: logos-format -i
   language: python
   types: [file]
-  files: \.(x|xm)$
+  files: \.(x|xi|xm|xmi)$
   args: [-style=file]
   require_serial: false
   additional_dependencies: []
