@@ -236,7 +236,7 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                 with open(tmp_logos) as tl, open(orig_logos, "w") as ol:
                     ol.write(tl.read())
         else:
-            log.warning(f"{program_name} performing post-clang-format stdout post-processing")
+            log.info(f"{program_name} performing post-clang-format stdout post-processing")
             norm_str_file = io.StringIO(cf_res.stdout)
             logos_str_file = io.StringIO()
             log.info(f"{program_name} is re-Logos'ing the clang-format output")
