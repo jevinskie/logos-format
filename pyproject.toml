@@ -18,7 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "mirrors-clang-format@git+https://github.com/jevinskie/mirrors-clang-format@v17.0.2",
+    "clang-format==17.0.3",
     "path",
     "rich",
     "pre-commit"
