@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.WARNING,
     format=LOG_FORMAT,
     datefmt="[%X]",
-    handlers=[RichHandler(console=Console(stderr=True))],
+    handlers=[RichHandler(console=Console(stderr=True), rich_tracebacks=True)],
 )
 
 program_name = "logos-format"
@@ -218,7 +218,7 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
             return e.returncode
         except Exception as e:
             log.error(f"clang-format output:\n{cf_res.stdout}")
-            log.exception(f"Received an unexpected exception when running clang-format")
+            log.exception(f"Received an unexpected exception when running '{' '.join(new_cf_cmd)}'")
             return 1
         if in_place:
             log.info(f"{program_name} performing post-clang-format in-place post-processing")
