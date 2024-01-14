@@ -14,7 +14,7 @@
 
 <h2>Features</h2>
 
-- Uses clang-format to format, therefore performs exactly like it. 
+- Uses clang-format to format, therefore performs exactly like it.
 - You can also specify arguments to be passed to clang-format.
 - Check out https://clang.llvm.org/docs/ClangFormatStyleOptions.html for possible options.
 - There is an example .clang-format file provided in this project as a starting point.
@@ -35,13 +35,13 @@ Check out more about Chromium Objective-C style guide here https://google.github
 <h2>How to use</h2>
 
 - clang-format is required to be installed on your machine <br>
-On Macs: 
+On Macs:
 
     ```
     brew install clang-format
     ```
 - python3 is required to be installed on your machine <br>
-On Macs: 
+On Macs:
 
     ```
     brew install python
@@ -110,7 +110,7 @@ require('formatter').setup {
 EOF
 ```
 - Now you can format the file using your keybind, in this case, using space + f
-  
+
 <h3>To use with others</h3>
 
 - Logos-format works with any text editor that allows the use of external formatters. This is because logos-format works like any traditional formatter, it reads input from stdin and spits out formatted code to stdout. Just look up how to set up an external formatter for your text editor. I will be adding popular options here once i have finished testing.

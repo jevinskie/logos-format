@@ -91,7 +91,10 @@ def logos_to_norm(logos_file: TextIO, norm_file: TextIO) -> None:
                 line = re.sub(logos_filter_pats[token], r"@logosformat\1", line)
         for token in specialFilterList:
             if token in line:
-                line = re.sub(logos_special_filter_pats[token], r"@logosformat\1", line) + ";"
+                line = (
+                    re.sub(logos_special_filter_pats[token], r"@logosformat\1", line)
+                    + ";"
+                )
         norm_file.write(line)
 
 
@@ -135,11 +138,15 @@ class SaveableTempDir(TempDir):
             super().__exit__(exc_type, exc_val, exc_tb)
 
 
-def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str]) -> int:
+def real_main(
+    logos_format_args: argparse.Namespace, clang_format_args: list[str]
+) -> int:
     if logos_format_args.version:
         print(f"{program_name} version {logos_format_version}")
         print(
-            subprocess.run([clang_format_path, "--version"], capture_output=True, text=True).stdout,
+            subprocess.run(
+                [clang_format_path, "--version"], capture_output=True, text=True
+            ).stdout,
             end="",
         )
         return 0
@@ -154,7 +161,9 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
     else:
         log.info(f"{program_name} will output formatted code to stdout")
     # gotta make the tmp dir in cwd or else clang-format won't find our .clang-format
-    with SaveableTempDir(prefix=f"{program_name}-tmp-", dir=Path.getcwd(), save=save_temps) as d:
+    with SaveableTempDir(
+        prefix=f"{program_name}-tmp-", dir=Path.getcwd(), save=save_temps
+    ) as d:
         if save_temps or verbose:
             log.warning(f"Saving {program_name} temporary files in '{d}'")
             if save_temps:
@@ -170,10 +179,16 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                 norm_ext = logos_extensions_to_normal_extensions[orig_logos.ext]
                 tmp_norm = Path(
                     tempfile.NamedTemporaryFile(
-                        mode="w", dir=d, prefix=orig_logos.stem + "-", suffix=norm_ext, delete=False
+                        mode="w",
+                        dir=d,
+                        prefix=orig_logos.stem + "-",
+                        suffix=norm_ext,
+                        delete=False,
                     ).name
                 )
-                log.info(f"Writing de-Logos'ed version of '{orig_logos}' at '{tmp_norm}'")
+                log.info(
+                    f"Writing de-Logos'ed version of '{orig_logos}' at '{tmp_norm}'"
+                )
                 if in_place:
                     # create a temporary Logos file for re-Logos'ing to avoid partial failure
                     tmp_logos = Path(
@@ -187,8 +202,12 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                     )
                     tmp_norm_to_tmp_logos[tmp_norm] = tmp_logos
                     tmp_logos_to_orig_logos[tmp_logos] = orig_logos
-                log.info(f"Transforming '{orig_logos}' to temporary normalized '{tmp_norm}'")
-                with open(orig_logos) as orig_logos_file, open(tmp_norm, "w") as tmp_norm_file:
+                log.info(
+                    f"Transforming '{orig_logos}' to temporary normalized '{tmp_norm}'"
+                )
+                with open(orig_logos) as orig_logos_file, open(
+                    tmp_norm, "w"
+                ) as tmp_norm_file:
                     logos_to_norm(orig_logos_file, tmp_norm_file)
                 if save_temps and not in_place:
                     tmp_norm_unformatted = (
@@ -208,7 +227,11 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
         log.info(f"{program_name} is running '{' '.join(new_cf_cmd)}'")
         try:
             cf_res = subprocess.run(
-                new_cf_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=True
+                new_cf_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=True,
             )
         except subprocess.CalledProcessError as e:
             log.error(f"clang-format output:\n{e.output}")
@@ -216,19 +239,25 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                 f"{program_name} got return code {e.returncode} while running '{' '.join(new_cf_cmd)}'"
             )
             return e.returncode
-        except Exception as e:
+        except Exception:
             log.error(f"clang-format output:\n{cf_res.stdout}")
-            log.exception(f"Received an unexpected exception when running '{' '.join(new_cf_cmd)}'")
+            log.exception(
+                f"Received an unexpected exception when running '{' '.join(new_cf_cmd)}'"
+            )
             return 1
         if in_place:
-            log.info(f"{program_name} performing post-clang-format in-place post-processing")
+            log.info(
+                f"{program_name} performing post-clang-format in-place post-processing"
+            )
             print(cf_res.stdout, end="")
             # re-Logos the clang-format'ed normalized file
             for tmp_norm, tmp_logos in tmp_norm_to_tmp_logos.items():
                 log.info(
                     f"Transforming temporary normalized '{tmp_norm}' to temporary Logos '{tmp_logos}'"
                 )
-                with open(tmp_norm) as tmp_norm_file, open(tmp_logos, "w") as tmp_logos_file:
+                with open(tmp_norm) as tmp_norm_file, open(
+                    tmp_logos, "w"
+                ) as tmp_logos_file:
                     norm_to_logos(tmp_norm_file, tmp_logos_file)
             # Copy changes from temporary clang-format'ed Logos file to original Logos file
             for tmp_logos, orig_logos in tmp_logos_to_orig_logos.items():
@@ -236,13 +265,17 @@ def real_main(logos_format_args: argparse.Namespace, clang_format_args: list[str
                 with open(tmp_logos) as tl, open(orig_logos, "w") as ol:
                     ol.write(tl.read())
         else:
-            log.info(f"{program_name} performing post-clang-format stdout post-processing")
+            log.info(
+                f"{program_name} performing post-clang-format stdout post-processing"
+            )
             norm_str_file = io.StringIO(cf_res.stdout)
             logos_str_file = io.StringIO()
             log.info(f"{program_name} is re-Logos'ing the clang-format output")
             norm_to_logos(norm_str_file, logos_str_file)
             logos_str_file.seek(0, io.SEEK_SET)
-            log.info(f"{program_name} is displaying the re-Logos'ed clang-format output")
+            log.info(
+                f"{program_name} is displaying the re-Logos'ed clang-format output"
+            )
             print(logos_str_file.read(), end="")
     return 0
 
@@ -271,7 +304,9 @@ class LogosHelpFormatter(argparse.HelpFormatter):
             if match is not None:
                 num_chars_before_dash = len(match.group(0)) - 1
                 logos_verbose_line = match.group("pre_space") + "--verbose-logos"
-                num_spaces_after_verbose_logos = num_chars_before_dash - len(logos_verbose_line)
+                num_spaces_after_verbose_logos = num_chars_before_dash - len(
+                    logos_verbose_line
+                )
                 logos_verbose_line = (
                     logos_verbose_line
                     + " " * num_spaces_after_verbose_logos
@@ -297,9 +332,13 @@ class LogosHelpFormatter(argparse.HelpFormatter):
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description=program_name, formatter_class=LogosHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=program_name, formatter_class=LogosHelpFormatter
+    )
     parser.add_argument(
-        "--verbose-logos", action="store_true", help=f"Verbose output from {program_name}."
+        "--verbose-logos",
+        action="store_true",
+        help=f"Verbose output from {program_name}.",
     )
     parser.add_argument(
         "--save-logos-temps",
@@ -307,7 +346,10 @@ def get_arg_parser() -> argparse.ArgumentParser:
         help=f"Don't delete temporary {program_name} files.",
     )
     parser.add_argument(
-        "-i", action="store_true", dest="in_place", help="Inplace edit <file>s, if specified."
+        "-i",
+        action="store_true",
+        dest="in_place",
+        help="Inplace edit <file>s, if specified.",
     )
     parser.add_argument(
         "--version", action="store_true", help="Display the version of this program"
@@ -320,7 +362,7 @@ def main() -> int:
         arg_parser = get_arg_parser()
         logos_format_args, clang_format_args = arg_parser.parse_known_intermixed_args()
         return real_main(logos_format_args, clang_format_args)
-    except Exception as e:
+    except Exception:
         log.exception(f"Received an unexpected exception when running {program_name}")
         return 1
     except KeyboardInterrupt:

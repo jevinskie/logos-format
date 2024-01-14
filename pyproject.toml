@@ -1,40 +1,40 @@
 [build-system]
-requires = ["setuptools>=61", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61", "setuptools-scm>=8.0"]
 
 [project]
-name = "logos-format"
-dynamic = ["version"]
 authors = [
-    {name = "Hearse", email = "hearsd@gmail.com"},
-    {name = "Jevin Sweval", email = "jevinsweval@gmail.com"},
+  {name = "Hearse", email = "hearsd@gmail.com"},
+  {name = "Jevin Sweval", email = "jevinsweval@gmail.com"}
 ]
-description = "clang-format with Theos/Logos compatibility and pre-commit plugin"
-readme = {file = 'README.md', content-type='text/markdown'}
-requires-python = ">=3.8"
-keywords = ["clang-format", "pre-commit", "theos", "logos", "ios-tweak"]
-license = {text = "MIT"}
 classifiers = [
-    "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3"
 ]
 dependencies = [
-    "clang-format==17.0.3",
-    "path",
-    "rich",
-    "pre-commit"
+  "clang-format==17.0.6",
+  "path",
+  "rich",
+  "pre-commit"
 ]
+description = "clang-format with Theos/Logos compatibility and pre-commit plugin"
+dynamic = ["version"]
+keywords = ["clang-format", "pre-commit", "theos", "logos", "ios-tweak"]
+license = {text = "MIT"}
+name = "logos-format"
+readme = {file = 'README.md', content-type = 'text/markdown'}
+requires-python = ">=3.8"
+
+[project.scripts]
+logos-format = "logos_format.logos_format:main"
 
 [project.urls]
 repository = "https://github.com/jevinskie/logos-format"
 
-[project.scripts]
-logos-format = "logos_format.logos_format:main"
+[tool.setuptools]
+zip-safe = true
 
 [tool.setuptools.dynamic]
 version = {attr = "logos_format._version.__version__"}
 
 [tool.setuptools_scm]
 version_file = "logos_format/_version.py"
-
-[tool.setuptools]
-zip-safe = true
