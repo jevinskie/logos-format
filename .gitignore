@@ -2,6 +2,10 @@
 **/__pycache__/
 /logos_format.egg-info/
 /logos_format/_version.py
+# Ruff
+/.ruff_cache/
+# Mypy
+/.mypy_cache/
 
 # Testing
 **/logos-format-tmp-*

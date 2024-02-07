@@ -145,7 +145,7 @@ def real_main(
         print(f"{program_name} version {logos_format_version}")
         print(
             subprocess.run(
-                [clang_format_path, "--version"], capture_output=True, text=True
+                (clang_format_path, "--version"), capture_output=True, text=True
             ).stdout,
             end="",
         )
@@ -293,7 +293,7 @@ class LogosHelpFormatter(argparse.HelpFormatter):
     def format_help(self) -> str:
         logos_format_pat = re.compile(r"(?<!\.)clang-format")
         clang_help_str = subprocess.run(
-            [clang_format_path, "-h"], capture_output=True, text=True
+            (clang_format_path, "-h"), capture_output=True, text=True
         ).stdout
         logos_help_lines = clang_help_str.splitlines()
         logos_help_lines[0] = f"OVERVIEW: {self._prog}: A tool to format Logos code."
